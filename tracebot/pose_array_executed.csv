@@ -1,0 +1,26 @@
+Idx,SubDiv,Point,Orientation,Succ. Approached,Error,Delta_d,Delta_phi
+0,-1,[ 0.25   -0.6051  1.5701],[ 0.962   0.      0.     -0.2732],1,Pose reached within tolerance,0.0,1.0
+1,-1,[ 0.25 -0.7   1.4 ],[ 0.7071  0.      0.     -0.7071],1,Pose reached within tolerance,0.0001,1.0
+2,-1,[ 0.3118 -0.6618  1.5   ],[ 0.8537  0.1458 -0.0972 -0.4905],1,Pose reached within tolerance,0.0001,1.0
+3,-1,[ 0.3551 -0.6701  1.4   ],[ 0.6802  0.1932 -0.1932 -0.6802],1,Pose reached within tolerance,0.0,1.0
+4,-1,[ 0.4118 -0.6     1.4618],[ 0.7121  0.384  -0.2934 -0.5093],1,Pose reached within tolerance,0.0,1.0
+5,-1,[ 0.35   -0.5618  1.5618],[ 0.8884  0.3394 -0.1876 -0.2456],1,Pose reached within tolerance,0.0001,1.0
+6,-1,[ 0.4201 -0.5     1.5051],[ 0.6652  0.5659 -0.3709 -0.3156],1,Pose reached within tolerance,0.0,1.0
+7,-1,[ 0.45 -0.5   1.4 ],[ 0.5  0.5 -0.5 -0.5],1,Pose reached within tolerance,0.0,1.0
+8,-1,[ 0.35   -0.4382  1.5618],[ 0.3394  0.8884 -0.2456 -0.1876],1,Pose reached within tolerance,0.0001,1.0
+9,-1,[ 0.4118 -0.4     1.4618],[ 0.384   0.7121 -0.5093 -0.2934],1,Pose reached within tolerance,0.0,1.0
+10,-1,[ 0.3551 -0.3299  1.4   ],[ 0.1932  0.6802 -0.6802 -0.1932],1,Pose reached within tolerance,0.0001,1.0
+11,-1,[ 0.3118 -0.3382  1.5   ],[ 0.1458  0.8537 -0.4905 -0.0972],1,Pose reached within tolerance,0.0,1.0
+12,-1,[ 0.25   -0.3949  1.5701],[-0.      0.962  -0.2732  0.    ],1,Pose reached within tolerance,0.0001,1.0
+13,-1,[ 0.25 -0.5   1.6 ],[ 1.  0.  0. -0.],1,Pose reached within tolerance,0.0,1.0
+14,-1,[ 0.25 -0.3   1.4 ],[ 0.      0.7071 -0.7071  0.    ],0,Pose reached NOT within tolerance,0.2828,0.0001
+15,-1,[ 0.1882 -0.3382  1.5   ],[-0.1458  0.8537 -0.4905  0.0972],1,Pose reached within tolerance,0.0001,1.0
+16,-1,[ 0.1449 -0.3299  1.4   ],[-0.1932  0.6802 -0.6802  0.1932],1,Pose reached within tolerance,0.0,1.0
+17,-1,[ 0.0882 -0.4     1.4618],[-0.384   0.7121 -0.5093  0.2934],0,Pose reached NOT within tolerance,0.1093,0.9616
+18,-1,[ 0.15   -0.4382  1.5618],[-0.3394  0.8884 -0.2456  0.1876],1,Pose reached within tolerance,0.0,1.0
+19,-1,[ 0.0799 -0.5     1.5051],[ 0.6652 -0.5659  0.3709 -0.3156],0,Pose reached NOT within tolerance,0.1093,0.8788
+20,-1,[ 0.05 -0.5   1.4 ],[ 0.5 -0.5  0.5 -0.5],0,Pose reached NOT within tolerance,0.2,0.8305
+21,-1,[ 0.15   -0.5618  1.5618],[ 0.8884 -0.3394  0.1876 -0.2456],1,Pose reached within tolerance,0.0001,1.0
+22,-1,[ 0.0882 -0.6     1.4618],[ 0.7121 -0.384   0.2934 -0.5093],0,Pose reached NOT within tolerance,0.1236,0.943
+23,-1,[ 0.1449 -0.6701  1.4   ],[ 0.6802 -0.1932  0.1932 -0.6802],0,Pose reached NOT within tolerance,0.1947,0.8731
+24,-1,[ 0.1882 -0.6618  1.5   ],[ 0.8537 -0.1458  0.0972 -0.4905],1,Pose reached within tolerance,0.0,1.0
