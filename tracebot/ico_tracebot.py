@@ -198,6 +198,12 @@ if __name__ == '__main__':
 
     poses_6d = calculate_poses_6d(
         positive_vertices_sorted, x_vectors_to_poi_3d, y_vectors_to_poi_3d, z_vectors_to_poi_3d)
+    print(type(poses_6d))
+    print(poses_6d)
+    # poses_6d_dict = {"x": [], "y": [],
+    #                          "z": [], "qx": [], "qy": [], "qz": [], "qw": []}
+    poses_6d_dict = ["x", "y", "z", "qx", "qy", "qz", "qw"]
+    pd.DataFrame(poses_6d).to_csv("poses_6d.csv", header=poses_6d_dict, index=None)
     pose_array = create_pose_array_msg(poses_6d)
 
     input("============ Press `Enter` to publish the middle point and the viewing hemisphere!")

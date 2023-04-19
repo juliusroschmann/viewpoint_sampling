@@ -1,0 +1,116 @@
+scp camera_d435.yaml julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated
+scp -r 3D-DAT-master julius@192.168.141.40:/home/julius/
+scp -r dataset_424 julius@192.168.141.40:/home/julius/
+
+#from host
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid/depth_nerf /home/julius/Documents/auswertung/001_standing_liquid/instant-dex_nerf/full_res/
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid/depth_norm_nerf /home/julius/Documents/auswertung/001_standing_liquid/instant-dex_nerf/full_res/
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid/rgb_nerf /home/julius/Documents/auswertung/001_standing_liquid/instant-dex_nerf/full_res/
+
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/depth_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/half_res/
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/depth_norm_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/half_res/
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/rgb_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/half_res/
+
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/depth_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/third_res/
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/depth_norm_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/third_res/
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/rgb_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/third_res/
+
+
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "001_standing_liquid_nerfacto_dex_nerf"
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "001_standing_liquid_original"
+
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "002_lying_liquid_nerfacto_dex_nerf"
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "002_lying_liquid_original"
+
+
+
+ramona TAB1 empty
+ramona TAB2 007 downscale 3
+ramona TAB3 empty
+ramona TAB4 empty
+
+#finished
+#001
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/003_standing_empty tracebot-data
+ns-eval --load-config /home/julius/outputs/003_standing_empty/nerfacto/2023-04-17_145315/config.yml 
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/003_standing_empty tracebot-data --downscale_factor 2
+ns-eval --load-config ~/outputs/003_standing_empty/nerfacto/2023-04-17_160050/config.yml --output-path=~/outputs/003_standing_empty/nerfacto/2023-04-17_160050/output.json
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/003_standing_empty tracebot-data --downscale_factor 3
+ns-eval --load-config ~/outputs/003_standing_empty/nerfacto/2023-04-17_162023/config.yml --output-path=~/outputs/003_standing_empty/nerfacto/2023-04-17_154852/output.json
+
+#finished
+#002
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/002_lying_liquid tracebot-data
+ns-eval --load-config /home/julius/outputs/002_lying_liquid/nerfacto/2023-04-17_161153/config.yml
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/002_lying_liquid tracebot-data --downscale_factor 2
+ns-eval --load-config ~/outputs/002_lying_liquid/nerfacto/2023-04-18_094526/config.yml
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/002_lying_liquid tracebot-data --downscale_factor 3
+ns-eval --load-config ~/outputs/002_lying_liquid/nerfacto/2023-04-18_095931/config.yml
+
+#finished
+#003
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/003_standing_empty tracebot-data
+ns-eval --load-config /home/julius/outputs/003_standing_empty/nerfacto/2023-04-17_145315/config.yml 
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/003_standing_empty tracebot-data --downscale_factor 2
+ns-eval --load-config ~/outputs/003_standing_empty/nerfacto/2023-04-18_094805/config.yml
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/003_standing_empty tracebot-data --downscale_factor 3
+ns-eval --load-config ~/outputs/003_standing_empty/nerfacto/2023-04-18_100338/config.yml
+
+
+#005
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/006_standing_coated tracebot-data
+ns-eval --load-config /home/julius/outputs/006_standing_coated/nerfacto/2023-04-18_094406/config.yml
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/006_standing_coated tracebot-data --downscale_factor 2
+ns-eval --load-config ~/outputs/006_standing_coated/nerfacto/2023-04-18_101854/config.yml
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/006_standing_coated tracebot-data --downscale_factor 3
+ns-eval --load-config ~/outputs/006_standing_coated/nerfacto/2023-04-18_103524/config.yml
+
+#006
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/006_standing_coated tracebot-data
+ns-eval --load-config /home/julius/outputs/006_standing_coated/nerfacto/2023-04-18_095355/config.yml
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/006_standing_coated tracebot-data --downscale_factor 2
+ns-eval --load-config ~/outputs/006_standing_coated/nerfacto/2023-04-18_103222/config.yml
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/006_standing_coated tracebot-data --downscale_factor 3
+ns-eval --load-config ~/outputs/006_standing_coated/nerfacto/2023-04-18_104839/config.yml
+
+
+#007
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated tracebot-data
+ns-eval --load-config /home/julius/outputs/007_lying_coated/nerfacto/2023-04-18_101057/config.yml
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated tracebot-data --downscale_factor 2
+ns-eval --load-config ~/outputs/007_lying_coated/nerfacto/2023-04-18_104619/config.yml
+
+ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated tracebot-data --downscale_factor 3
+ns-eval --load-config ~/outputs/007_lying_coated/nerfacto/2023-04-18_110146/config.yml
+
+
+
+
+#Instant NGP
+#001
+ns-train instant-ngp-bounded --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid tracebot-data
+ns-eval --load-config ~/outputs/001_standing_liquid/instant-ngp-bounded/2023-04-18_123450/config.yml
+
+ns-train instant-ngp-bounded --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid tracebot-data --downscale_factor 2
+ns-eval --load-config ~/outputs/001_standing_liquid/nerfacto/2023-04-17_160050/config.yml --output-path=~/outputs/001_standing_liquid/nerfacto/2023-04-17_160050/output.json
+
+ns-train instant-ngp-bounded --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid tracebot-data --downscale_factor 3
+ns-eval --load-config ~/outputs/001_standing_liquid/nerfacto/2023-04-17_162023/config.yml --output-path=~/outputs/001_standing_liquid/nerfacto/2023-04-17_154852/output.json
+
+
+
+
+export PATH=/usr/local/cuda-11.6/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+

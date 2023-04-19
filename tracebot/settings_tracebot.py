@@ -27,15 +27,19 @@ NAME_OF_PYTHON_SCRIPT_TO_CALL = os.getcwd() + "/ico_tracebot.py"
 """
 Coordinates of middle point of hemisphere
 """
-POI_X = 0.25
-POI_Y = -0.5
-POI_Z = 1.4
+# POI_X = 0.25
+# POI_Y = -0.5
+# POI_Z = 1.4
+
+POI_X = -0.44
+POI_Y = 0.19
+POI_Z = 0.83
 
 """
 Icosphere params
 """
-SUB_DIVISIONS = 2
-RADIUS = 0.2
+SUB_DIVISIONS = 9
+RADIUS = 0.44
 
 """
 Collision Box dimensions
