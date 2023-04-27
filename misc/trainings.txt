@@ -1,11 +1,17 @@
 scp camera_d435.yaml julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated
 scp -r 3D-DAT-master julius@192.168.141.40:/home/julius/
-scp -r dataset_424 julius@192.168.141.40:/home/julius/
+scp -r Julius julius@192.168.141.40:/home/julius/
+scp -r dataset_101 julius@192.168.141.40:/home/julius/data/dataset_101
+
 
 #from host
-scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid/depth_nerf /home/julius/Documents/auswertung/001_standing_liquid/instant-dex_nerf/full_res/
-scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid/depth_norm_nerf /home/julius/Documents/auswertung/001_standing_liquid/instant-dex_nerf/full_res/
-scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid/rgb_nerf /home/julius/Documents/auswertung/001_standing_liquid/instant-dex_nerf/full_res/
+
+scp -r julius@192.168.141.40:~/data/dataset_101/scenes/sparse /home/julius/Documents/
+
+
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/002_lying_liquid/depth_nerf /home/julius/Documents/auswertung/002_lying_liquid/instant-dex_nerf/full_res/
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/002_lying_liquid/depth_norm_nerf /home/julius/Documents/auswertung/002_lying_liquid/instant-dex_nerf/full_res/
+scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/002_lying_liquid/rgb_nerf /home/julius/Documents/auswertung/002_lying_liquid/instant-dex_nerf/full_res/
 
 scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/depth_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/half_res/
 scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/depth_norm_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/half_res/
@@ -15,6 +21,9 @@ scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes
 scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/depth_norm_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/third_res/
 scp -r julius@192.168.141.40:/home/julius/nerfstudio-tracebot/data/Julius/scenes/007_lying_coated/rgb_nerf /home/julius/Documents/auswertung/007_lying_coated/nerfacto_dex_nerf/third_res/
 
+scp -r julius@192.168.141.40:/home/julius/dataset_424/reconstruction /home/julius/Documents/dataset_424
+
+/home/julius/dataset_424/reconstruction
 
 python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "001_standing_liquid_nerfacto_dex_nerf"
 python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "001_standing_liquid_original"
@@ -22,10 +31,20 @@ python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/datase
 python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "002_lying_liquid_nerfacto_dex_nerf"
 python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "002_lying_liquid_original"
 
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "003_standing_empty_nerfacto_dex_nerf"
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "003_standing_empty_original"
 
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "005_lying_empty_nerfacto_dex_nerf"
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "005_lying_empty_original"
+
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "006_standing_coated_nerfacto_dex_nerf"
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "006_standing_coated_original"
+
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "007_lying_coated_nerfacto_dex_nerf"
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "007_lying_coated_original"
 
 ramona TAB1 empty
-ramona TAB2 007 downscale 3
+ramona TAB2 empty
 ramona TAB3 empty
 ramona TAB4 empty
 
@@ -95,9 +114,12 @@ ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model
 ns-eval --load-config ~/outputs/007_lying_coated/nerfacto/2023-04-18_110146/config.yml
 
 
-
+./build/testbed --no-gui --scene /home/julius/instant-DexNerf/data/nerf/002_lying_liquid_original/transforms.json
+python3 /home/julius/3D-DAT-master/scripts/reconstruct.py -d /home/julius/dataset_424/config.cfg --scene_id "007_lying_coated_original"
 
 #Instant NGP
+
+#not finished since new scene necessary
 #001
 ns-train instant-ngp-bounded --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/001_standing_liquid tracebot-data
 ns-eval --load-config ~/outputs/001_standing_liquid/instant-ngp-bounded/2023-04-18_123450/config.yml
@@ -109,8 +131,23 @@ ns-train instant-ngp-bounded --pipeline.model.depth-render-method dex-nerf --pip
 ns-eval --load-config ~/outputs/001_standing_liquid/nerfacto/2023-04-17_162023/config.yml --output-path=~/outputs/001_standing_liquid/nerfacto/2023-04-17_154852/output.json
 
 
+#002
+ns-train instant-ngp-bounded --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/002_lying_liquid tracebot-data
+ns-eval --load-config ~/outputs/002_lying_liquid/instant-ngp-bounded/2023-04-20_135709/config.yml
+
+ns-train instant-ngp-bounded --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/002_lying_liquid tracebot-data --downscale_factor 2
+ns-eval --load-config ~/outputs/002_lying_liquid/nerfacto/2023-04-17_160050/config.yml --output-path=~/outputs/002_lying_liquid/nerfacto/2023-04-17_160050/output.json
+
+ns-train instant-ngp-bounded --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh 15 --data /home/julius/nerfstudio-tracebot/data/Julius/scenes/002_lying_liquid tracebot-data --downscale_factor 3
+ns-eval --load-config ~/outputs/002_lying_liquid/nerfacto/2023-04-17_162023/config.yml --output-path=~/outputs/002_lying_liquid/nerfacto/2023-04-17_154852/output.json
 
 
-export PATH=/usr/local/cuda-11.6/bin${PATH:+:${PATH}}
-export LD_LIBRARY_PATH=/usr/local/cuda-11.6/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
 
+
+
+
+colmap automatic_reconstructor --workspace_path /home/julius/data/dataset_101/scenes --image_path /home/julius/data/dataset_101/scenes/001_standing_liquid_original/rgb
+colmap automatic_reconstructor --workspace_path /home/julius/Julius/scenes --image_path /home/julius/Julius/scenes/002_lying_liquid/rgb
+
+
+python3 ~/colmap/scripts/python/read_write_model.py --input_model "~/data/dataset_101/scenes/sparse/0/cameras.bin" --input_format ".bin" --output_model "~/"
