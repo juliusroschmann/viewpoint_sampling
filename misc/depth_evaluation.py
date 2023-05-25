@@ -23,13 +23,13 @@ def main():
         title_list.append(f"{obj}_depth_difference")
 
  
-    method = "instant-dex_nerf" #"sensor"
+    method = "sensor"
     #subsamples = [10, 20, 30, 40, 50, 60, 80, 100, 200, 300]
     subsamples = [300]
     # here implement for loop over all scenes
     #for scene in [scenes[0]]:
     for subsample in subsamples:
-        for scene in scenes[4:]:
+        for scene in scenes:
             canister_list = []
             small_bottle_list = []
             medium_bottle_list = []
@@ -38,8 +38,8 @@ def main():
             to_eval_imgs_list = []
             # folder_to_evaluate = f'/home/julius/Documents/Julius_03_auswertung/scenes_trained_with_other_params/{scene}/nerfacto/depth_nerf_sigma_10_iter_5000/depth_nerf'
             #folder_to_evaluate = f"/home/julius/Documents/Julius_03_x_auswertung/Julius_03_{subsample}/scenes/{scene}/depth_nerf"
-            #folder_to_evaluate = f"/home/julius/Documents/Julius_03/scenes/{scene}/depth"
-            folder_to_evaluate = f"/home/julius/Documents/Julius_03_x_auswertung/Julius_03_{subsample}/instant-dex_nerf_full/{scene}/depth_{method}_full_Julius_03_{subsample}_scenes_{scene}"
+            folder_to_evaluate = f"/home/julius/Documents/Julius_03/scenes/{scene}/depth"
+            #folder_to_evaluate = f"/home/julius/Documents/Julius_03_x_auswertung/Julius_03_{subsample}/instant-dex_nerf_full/{scene}/depth_{method}_full_Julius_03_{subsample}_scenes_{scene}"
                         
             folder_to_results = os.path.dirname(
                 os.path.dirname(os.path.dirname(folder_to_evaluate))) + "/results/" + str(scene)
@@ -90,7 +90,7 @@ def main():
 
             else:
                 mydict = {"Subsample": [], "File": [], "Scene": [], "Object": [], "Max": [],
-                        "Min": [], "Median": [], "Mean": [], "Std": [], "Var": [], "Px_factor": []}
+                        "Min": [], "Median": [], "Mean": [], "Std": [], "Var": [], "Px_gt": [], "Px_real": [], "Px=0": []}
                 for idx, _ in enumerate(tqdm(blender_depth)):
 
                     filename = os.path.basename(full_depth_list[idx])
@@ -164,26 +164,28 @@ def main():
                     mydict = append_to_dict(
                         mydict, subsample, filename, scene, large_bottle_vals, object_name=obj_list[3])
 
-                    fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(20, 15))
-                    plt.set_cmap('plasma')
-                    plt.suptitle(f"Image {filename} from scene {scene}")
-                    for idx, ax in enumerate(axes.flat):
-                        ax.set_axis_off()
-                        im = ax.imshow(master_list[idx])
-                        ax.set_title(title_list[idx])
+                    # fig, axes = plt.subplots(nrows=4, ncols=3, figsize=(20, 15))
+                    # plt.set_cmap('plasma')
+                    # plt.suptitle(f"Image {filename} from scene {scene}")
+                    # for idx, ax in enumerate(axes.flat):
+                    #     ax.set_axis_off()
+                    #     im = ax.imshow(master_list[idx])
+                    #     ax.set_title(title_list[idx])
 
-                    cb_ax = fig.add_axes([0.9, 0.1, 0.02, 0.8])
-                    cbar = fig.colorbar(im, cax=cb_ax)
-                    cbar.set_ticks(np.arange(0, 100.5, 5)) # cbar.set_ticklabels(['low', 'medium', 'high'])
-                    fname = filename.split(".png")[0]              
-                    # plt.savefig(folder_to_results + f"/{scene}_{fname}_{method}.pdf") #, bbox_inches='tight')
-                    # fig.close()
-                    plt.show()
+                    # cb_ax = fig.add_axes([0.9, 0.1, 0.02, 0.8])
+                    # cbar = fig.colorbar(im, cax=cb_ax)
+                    # cbar.set_ticks(np.arange(0, 100.5, 5)) # cbar.set_ticklabels(['low', 'medium', 'high'])
+                    # fname = filename.split(".png")[0]              
+                    # # plt.savefig(folder_to_results + f"/{scene}_{fname}_{method}.pdf") #, bbox_inches='tight')
+                    # # fig.close()
+                    # plt.show()
                     
 
                 df = pd.DataFrame.from_dict(data=mydict)
-                df.to_csv(folder_to_results + f"/results_{scene}_{method}.csv")
-                print(f"Saving dataframe to: {folder_to_results}" + f"/results_{scene}_{method}.csv")
+                path_string = folder_to_results + f"/results_{scene}_{method}.csv"
+                #path_string = folder_to_results + f"/results_{scene}_{method}_FULL.csv"
+                df.to_csv(path_string)
+                print(f"Saving dataframe to: {path_string}")
                 # print(df.head(100))
                 print(df["Max"].mean())
                 print(df["Min"].mean())
@@ -197,24 +199,28 @@ def calc_diff(just_diff, obj_gt, obj_real):
     new_img = np.zeros_like(obj_gt)
     x = np.argwhere(obj_gt)[:, 0]
     y = np.argwhere(obj_gt)[:, 1]
-
     px_gt = obj_gt[x, y]
     px_real = obj_real[x, y]
 
-    # if px_gt.shape[0] > 0:
-    #     print("px_gt.shape: ", px_gt.shape)
-    #     print(len(np.argwhere(px_gt)))
-    #     print("px_real.shape: ", px_real.shape)
-    #     print(len(np.argwhere(px_real)))
-    #     print(len(np.argwhere(px_real)) / len(np.argwhere(px_gt)))
+    zeros = np.argwhere(px_real == 0)
+    
+    flag = 0
+    if flag:
+        px_gt_reduced = px_gt
+        px_gt_reduced[zeros] = 0
+        px_diff = np.abs(px_gt_reduced - px_real)
+        # print(px_diff)
+        px_diff_clipped = np.clip(np.abs(px_diff), 0, 100)
+        # print(px_diff)
+        new_img[x, y] = px_diff_clipped
 
-
-
-    px_diff = np.abs(px_gt - px_real)
-    # print(px_diff)
-    px_diff_clipped = np.clip(np.abs(px_diff), 0, 100)
-    # print(px_diff)
-    new_img[x, y] = px_diff_clipped
+    else:
+        
+        px_diff = np.abs(px_gt - px_real)
+        # print(px_diff)
+        px_diff_clipped = np.clip(np.abs(px_diff), 0, 100)
+        # print(px_diff)
+        new_img[x, y] = px_diff_clipped
 
     if just_diff:
         # print(f"px_gt median: {np.median(px_gt):.4f}, px_real median: {np.median(px_real):.4f}, diff factor: {(np.median(px_gt) / np.median(px_real)):.4f}" )
@@ -223,9 +229,9 @@ def calc_diff(just_diff, obj_gt, obj_real):
         return new_img
 
     if len(px_diff) == 0:
-        return [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
+        return [np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan, np.nan]
     else:
-        return [np.max(px_diff), np.min(px_diff), np.median(px_diff), np.mean(px_diff), np.std(px_diff), np.var(px_diff), (len(np.argwhere(px_real)) / len(np.argwhere(px_gt)))]
+        return [np.max(px_diff), np.min(px_diff), np.median(px_diff), np.mean(px_diff), np.std(px_diff), np.var(px_diff), len(px_gt), len(px_real), len(zeros)]#(len(np.argwhere(px_real)) / len(np.argwhere(px_gt)))]
 
 
 def append_to_dict(mydict, subsample, filename, scene, vals, object_name):
@@ -239,7 +245,9 @@ def append_to_dict(mydict, subsample, filename, scene, vals, object_name):
     mydict["Mean"].append(vals[3])
     mydict["Std"].append(vals[4])
     mydict["Var"].append(vals[5])
-    mydict["Px_factor"].append(vals[6])
+    mydict["Px_gt"].append(vals[6])
+    mydict["Px_real"].append(vals[7])
+    mydict["Px=0"].append(vals[8])
     return mydict
 
 
