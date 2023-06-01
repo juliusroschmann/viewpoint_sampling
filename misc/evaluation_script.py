@@ -37,7 +37,7 @@ path_to_master = "/home/julius/Documents/Julius_03_x_auswertung"
 
 
 #methods = ["nerfacto", "instant-ngp","instant-ngp-bounded"]
-methods = ["nerfacto", "instant-dex_nerf"]
+methods = ["nerfacto"]
 sigma = 10
 iterations = 20000
 scenes = ['001_standing_coated',  '002_lying_coated',  '003_standing_liquid',  '004_lying_liquid', '005_standing_empty', '006_lying_empty']

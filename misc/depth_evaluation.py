@@ -7,6 +7,8 @@ import numpy as np
 import os
 import pandas as pd
 from tqdm import tqdm
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 
 def main():
@@ -14,7 +16,7 @@ def main():
     folder_per_obj_masks = '/home/julius/Documents/Julius_03_masks'
     folder_full_blender_depth = '/home/julius/Documents/Julius_03_depth_masks'
     scenes = sorted(os.listdir(folder_per_obj_masks))
-
+    
     obj_list = ["canister", "small_bottle", "medium_bottle", "large_bottle"]
     title_list = []
     for obj in obj_list:
@@ -22,10 +24,13 @@ def main():
         title_list.append(f"{obj}_nerf_reconstruction")
         title_list.append(f"{obj}_depth_difference")
 
+    test_img_indices = [3, 12, 13, 17, 18, 22, 23, 27, 30, 33, 34, 36, 41, 43, 46, 47, 49, 56, 64, 79, 87, 93, 97, 99, 103, 105, 106, 107, 108, 111, 112, 113, 114, 120, 121, 123, 124, 125, 127, 131, 137, 140, 156, 157, 166, 168, 171, 174, 179, 182, 183, 186, 187, 189, 195, 196, 197, 201, 202, 203, 212, 213, 214,
+                        217, 224, 225, 230, 234, 235, 239, 242, 245, 250, 252, 253, 254, 255, 257, 258, 261, 268, 276, 301, 302, 305, 307, 308, 309, 311, 317, 319, 320, 324, 325, 327, 328, 329, 333, 335, 336, 339, 341, 349, 353, 368, 376, 380, 383, 386, 387, 391, 392, 395, 396, 402, 403, 408, 409, 410, 413, 414, 419, 420, 424]
+    #test_img_indices = list(range(425))
  
-    method = "sensor"
-    #subsamples = [10, 20, 30, 40, 50, 60, 80, 100, 200, 300]
-    subsamples = [300]
+    method = "nerfacto_2_centered_124"
+    subsamples = [10, 20, 30, 40, 50, 60, 80, 100, 200, 300]
+    #subsamples = [300]
     # here implement for loop over all scenes
     #for scene in [scenes[0]]:
     for subsample in subsamples:
@@ -38,27 +43,32 @@ def main():
             to_eval_imgs_list = []
             # folder_to_evaluate = f'/home/julius/Documents/Julius_03_auswertung/scenes_trained_with_other_params/{scene}/nerfacto/depth_nerf_sigma_10_iter_5000/depth_nerf'
             #folder_to_evaluate = f"/home/julius/Documents/Julius_03_x_auswertung/Julius_03_{subsample}/scenes/{scene}/depth_nerf"
-            folder_to_evaluate = f"/home/julius/Documents/Julius_03/scenes/{scene}/depth"
+            #folder_to_evaluate = f"/home/julius/Documents/Julius_03/scenes/{scene}/depth"
             #folder_to_evaluate = f"/home/julius/Documents/Julius_03_x_auswertung/Julius_03_{subsample}/instant-dex_nerf_full/{scene}/depth_{method}_full_Julius_03_{subsample}_scenes_{scene}"
-                        
+            
+            folder_to_evaluate = f"/home/julius/Documents/Julius_03_x_auswertung/Julius_03_{subsample}/scenes/{scene}/depth_nerf_124_v2_centered_nerfacto"
+            
             folder_to_results = os.path.dirname(
                 os.path.dirname(os.path.dirname(folder_to_evaluate))) + "/results/" + str(scene)
             print(folder_to_results)
-            
             os.makedirs(folder_to_results, exist_ok=True)
         
             folder1 = os.path.join(folder_per_obj_masks, scene)
+            subsample_image_names = [(str(item).zfill(6)) +
+                                '.png' for item in test_img_indices]
             for img in sorted(os.listdir(folder1)):
                 image = (os.path.join(folder1, img))
-                if "canister" in img:
-                    canister_list.append(image)
-                elif "small" in img:
-                    small_bottle_list.append(image)
-                elif "medium" in img:
-                    medium_bottle_list.append(image)
-                elif "large" in img:
-                    large_bottle_list.append(image)
-
+                
+                if img[-10:] in subsample_image_names:
+                    if "canister" in img:
+                        canister_list.append(image)
+                    elif "small" in img:
+                        small_bottle_list.append(image)
+                    elif "medium" in img:
+                        medium_bottle_list.append(image)
+                    elif "large" in img:
+                        large_bottle_list.append(image)
+            
             canister_masks = imread_collection(canister_list)
             small_bottle_masks = imread_collection(small_bottle_list)
             medium_bottle_masks = imread_collection(medium_bottle_list)
@@ -66,11 +76,12 @@ def main():
 
             folder2 = os.path.join(folder_full_blender_depth, scene)
             for img in sorted(os.listdir(folder2)):
-                image = (os.path.join(folder2, img))
-                full_depth_list.append(image)
-
+                if img[-10:] in subsample_image_names:
+                    image = (os.path.join(folder2, img))
+                    full_depth_list.append(image)
+ 
             blender_depth = imread_collection(full_depth_list)
-            print("len blender: ", len(blender_depth))
+            
             for img in sorted(os.listdir(folder_to_evaluate)):
                 image = (os.path.join(folder_to_evaluate, img))
                 to_eval_imgs_list.append(image)
@@ -187,10 +198,10 @@ def main():
                 df.to_csv(path_string)
                 print(f"Saving dataframe to: {path_string}")
                 # print(df.head(100))
-                print(df["Max"].mean())
-                print(df["Min"].mean())
-                print(df["Median"].mean())
-                print(df["Mean"].mean())
+                # print(df["Max"].mean())
+                # print(df["Min"].mean())
+                # print(df["Median"].mean())
+                # print(df["Mean"].mean())
 
 
 
@@ -215,7 +226,6 @@ def calc_diff(just_diff, obj_gt, obj_real):
         new_img[x, y] = px_diff_clipped
 
     else:
-        
         px_diff = np.abs(px_gt - px_real)
         # print(px_diff)
         px_diff_clipped = np.clip(np.abs(px_diff), 0, 100)

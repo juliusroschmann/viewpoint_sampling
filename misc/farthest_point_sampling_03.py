@@ -133,11 +133,10 @@ for sample in sub_sample_list:
     #print(new_df.head(100))
 
     subsample_indices = new_df.index.to_list()
-    print("subsample_indices: ", subsample_indices)
-
-
+    test_img_indices = list(set(range(1,425)) - set(subsample_indices))
   
-    subsample_image_names = [(str(item).zfill(6))+'.png' for item in subsample_indices]
+    #subsample_image_names = [(str(item).zfill(6))+'.png' for item in subsample_indices]
+    subsample_image_names = [(str(item).zfill(6))+'.png' for item in test_img_indices]
 
     dest = path_to_master + "_" + str(sample) + "/"
 
