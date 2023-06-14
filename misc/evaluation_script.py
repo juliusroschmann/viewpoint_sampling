@@ -55,7 +55,7 @@ for path in path_to_scenes:
         path_to_one_scene = os.path.join(path, scene)
         #shutil.copy2("/home/julius/Documents/intrinsics.txt", path_to_one_scene)
         print("Now training for scene: {}.".format(path_to_one_scene))
-        cmd_train = "ns-train nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh " + str(sigma) + " --max-num-iterations " + str(iterations) + " tracebot-data"" --data " + path_to_one_scene + " --data_eval /home/julius/Julius_03/scenes/001_standing_coated"
+        cmd_train = "ns-train depth-nerfacto --pipeline.model.depth-render-method dex-nerf --pipeline.model.sigma_thresh " + str(sigma) + " --max-num-iterations " + str(iterations) + " tracebot-data"" --data " + path_to_one_scene + " --data_eval /home/julius/Julius_03/scenes/001_standing_coated"
         #print(cmd_train)
 
         try:

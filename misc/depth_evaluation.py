@@ -24,13 +24,13 @@ def main():
         title_list.append(f"{obj}_nerf_reconstruction")
         title_list.append(f"{obj}_depth_difference")
 
-    test_img_indices = [3, 12, 13, 17, 18, 22, 23, 27, 30, 33, 34, 36, 41, 43, 46, 47, 49, 56, 64, 79, 87, 93, 97, 99, 103, 105, 106, 107, 108, 111, 112, 113, 114, 120, 121, 123, 124, 125, 127, 131, 137, 140, 156, 157, 166, 168, 171, 174, 179, 182, 183, 186, 187, 189, 195, 196, 197, 201, 202, 203, 212, 213, 214,
-                        217, 224, 225, 230, 234, 235, 239, 242, 245, 250, 252, 253, 254, 255, 257, 258, 261, 268, 276, 301, 302, 305, 307, 308, 309, 311, 317, 319, 320, 324, 325, 327, 328, 329, 333, 335, 336, 339, 341, 349, 353, 368, 376, 380, 383, 386, 387, 391, 392, 395, 396, 402, 403, 408, 409, 410, 413, 414, 419, 420, 424]
-    #test_img_indices = list(range(425))
+    # test_img_indices = [3, 12, 13, 17, 18, 22, 23, 27, 30, 33, 34, 36, 41, 43, 46, 47, 49, 56, 64, 79, 87, 93, 97, 99, 103, 105, 106, 107, 108, 111, 112, 113, 114, 120, 121, 123, 124, 125, 127, 131, 137, 140, 156, 157, 166, 168, 171, 174, 179, 182, 183, 186, 187, 189, 195, 196, 197, 201, 202, 203, 212, 213, 214,
+    #                     217, 224, 225, 230, 234, 235, 239, 242, 245, 250, 252, 253, 254, 255, 257, 258, 261, 268, 276, 301, 302, 305, 307, 308, 309, 311, 317, 319, 320, 324, 325, 327, 328, 329, 333, 335, 336, 339, 341, 349, 353, 368, 376, 380, 383, 386, 387, 391, 392, 395, 396, 402, 403, 408, 409, 410, 413, 414, 419, 420, 424]
+    # #test_img_indices = list(range(425))
  
-    method = "nerfacto_2_centered_124"
-    subsamples = [10, 20, 30, 40, 50, 60, 80, 100, 200, 300]
-    #subsamples = [300]
+    method = "nerfacto_2_centered_only_subsamples"
+    #subsamples = [10, 20, 30, 40, 50, 60, 80, 100, 200, 300]
+    subsamples = [10]
     # here implement for loop over all scenes
     #for scene in [scenes[0]]:
     for subsample in subsamples:
@@ -46,7 +46,8 @@ def main():
             #folder_to_evaluate = f"/home/julius/Documents/Julius_03/scenes/{scene}/depth"
             #folder_to_evaluate = f"/home/julius/Documents/Julius_03_x_auswertung/Julius_03_{subsample}/instant-dex_nerf_full/{scene}/depth_{method}_full_Julius_03_{subsample}_scenes_{scene}"
             
-            folder_to_evaluate = f"/home/julius/Documents/Julius_03_x_auswertung/Julius_03_{subsample}/scenes/{scene}/depth_nerf_124_v2_centered_nerfacto"
+            folder_to_evaluate = f"/home/julius/Documents/Julius_03_x_auswertung/Julius_03_{subsample}/scenes/{scene}/depth_nerf_v2_centered_nerfacto_only_subsamples"
+            file_names_to_read = sorted([os.path.basename(os.path.join(folder_to_evaluate, f)) for f in os.listdir(folder_to_evaluate) if os.path.isfile(os.path.join(folder_to_evaluate, f))])
             
             folder_to_results = os.path.dirname(
                 os.path.dirname(os.path.dirname(folder_to_evaluate))) + "/results/" + str(scene)
@@ -54,8 +55,9 @@ def main():
             os.makedirs(folder_to_results, exist_ok=True)
         
             folder1 = os.path.join(folder_per_obj_masks, scene)
-            subsample_image_names = [(str(item).zfill(6)) +
-                                '.png' for item in test_img_indices]
+            # subsample_image_names = [(str(item).zfill(6)) +
+            #                     '.png' for item in test_img_indices]
+            subsample_image_names = file_names_to_read
             for img in sorted(os.listdir(folder1)):
                 image = (os.path.join(folder1, img))
                 
@@ -153,6 +155,7 @@ def main():
                     master_list = [canister_gt, canister_real, canister_diff, small_bottle_gt, small_bottle_real, small_bottle_diff,
                                 medium_bottle_gt, medium_bottle_real, medium_bottle_diff, large_bottle_gt, large_bottle_real, large_bottle_diff]
 
+                    
                     canister_vals = calc_diff(False, canister_gt, canister_real)
                     small_bottle_vals = calc_diff(
                         False, small_bottle_gt, small_bottle_real)
@@ -186,10 +189,26 @@ def main():
                     # cb_ax = fig.add_axes([0.9, 0.1, 0.02, 0.8])
                     # cbar = fig.colorbar(im, cax=cb_ax)
                     # cbar.set_ticks(np.arange(0, 100.5, 5)) # cbar.set_ticklabels(['low', 'medium', 'high'])
-                    # fname = filename.split(".png")[0]              
-                    # # plt.savefig(folder_to_results + f"/{scene}_{fname}_{method}.pdf") #, bbox_inches='tight')
-                    # # fig.close()
-                    # plt.show()
+                    
+                    fname = filename.split(".png")[0]
+                    fname = fname[6:]
+                    dest = folder_to_results + "/masked_nerf_depth"
+                    os.makedirs(dest, exist_ok=True)
+
+                    from PIL import Image
+                    
+                    im = canister_real + small_bottle_real + medium_bottle_real + large_bottle_real
+                    im = im.astype(np.uint16)
+                    im = Image.fromarray(im)
+                    im.save(dest + f"/{fname}.png")
+                    # print(im.dtype)
+                    # im = im.astype(np.uint16)
+                    # print(im.dtype)
+                            
+                    # plt.imsave(dest + f"/{fname}.png", im)              
+                    # plt.savefig(folder_to_results + f"/{scene}_{fname}_{method}.pdf") #, bbox_inches='tight')
+                    # fig.close()
+                    #plt.show()
                     
 
                 df = pd.DataFrame.from_dict(data=mydict)
