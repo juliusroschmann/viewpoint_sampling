@@ -1,0 +1,13 @@
+conda deactivate
+
+roslaunch tracebot_mockup_gazebo view_tracebot_gazebo.launch
+#hit play in gazebo
+
+roslaunch tracebot_moveit_config move_group.launch
+
+roslaunch tracebot_mockup_gazebo view_tracebot_rviz.launch
+
+
+
+python3 -m  pipreqs.pipreqs .
+pip install -r /path/to/requirements.txt
